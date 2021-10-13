@@ -8,7 +8,12 @@ set GLEW_URL=https://github.com/nigels-com/glew/releases/download/glew-2.2.0/gle
 
 :main
     if "%1" == "clean" (
-        call :cleanup
+        echo [*] Cleanup in progress ...
+        if exist external (
+            rd /s /q external
+            echo [!] external directory deleted!
+        )
+        echo [!] Cleanup done!
         exit /b 0
     )
     
@@ -34,8 +39,6 @@ set GLEW_URL=https://github.com/nigels-com/glew/releases/download/glew-2.2.0/gle
         for %%x in (%DEPENDENCIES%) do (
             if not exist %%x (
                 echo [!] %%x directory not found!
-                echo [!] Creating %%x directory!
-                mkdir %%x
                 call :download_dependency %%x
 
             ) else (
@@ -47,19 +50,16 @@ set GLEW_URL=https://github.com/nigels-com/glew/releases/download/glew-2.2.0/gle
 
 
 :download_dependency
-    pushd %~1
-        echo [*] Installing %~1 ...
-        call echo [!] link: %%%~1_URL%%%
-        call curl -L -O %%%~1_URL%%% 
-    popd
+    echo [*] Installing %~1 ...
+    call echo [!] link: %%%~1_URL%%%
+    call curl -L --output %~1.zip %%%~1_URL%%% 
+
+    mkdir %~1
+    tar -xf %~1.zip -C %~1 --strip-components 1
+    del %~1.zip
+
     exit /b 0
 
 
-:cleanup 
-    echo [*] Cleanup in progress ...
-    if exist external (
-        rd /s /q external
-        echo [!] external directory deleted!
-    )
-    echo [!] Cleanup done!
+:cleanup
     exit /b 0
