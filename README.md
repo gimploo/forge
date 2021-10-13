@@ -1,5 +1,7 @@
-### Build scripts for C projects
-    These scripts automatically downloads wanted dependencies and builds the project with user specified compilers
+# Build scripts for C projects
 
-1. Windows : run build.bat in the command prompt
-2. Linux   : run build.sh in an unix shell
+## Windows
+    Run build.bat in the command prompt
+
+## Linux
+    Run build.sh in any linux shell
