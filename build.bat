@@ -6,32 +6,47 @@ set SDL2_URL=https://www.libsdl.org/release/SDL2-devel-2.0.16-VC.zip
 set GLEW_URL=https://github.com/nigels-com/glew/releases/download/glew-2.2.0/glew-2.2.0-win32.zip
 
 
+REM Compiler of choice, MSVC
+set CC=cl
+set CC_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
+
+
+
 :main
     if "%1" == "clean" (
-        echo [*] Cleanup in progress ...
-        if exist external (
-            rd /s /q external
-            echo [!] external directory deleted!
-        )
-        echo [!] Cleanup done!
+        call :cleanup
         exit /b 0
     )
-    
-    echo [*] Running build script for windows...
-    echo [*] Checking if dependenices are installed ...
 
+    echo [*] Running build script for windows...
+    
+    echo [*] Checking %CC% compiler is installed ...
+    call :check_compiler_is_installed 
+
+
+    echo [*] Checking if all dependenices are installed ...
     if exist external (
-        echo [!] external directory found!
+        echo [!] External directory found!
     ) else (
-        echo [!] external directory not found!
+        echo [!] External directory not found!
         mkdir external
     )
 
-    echo [!] checking dependenices ...
-    call :check_dependencies_are_installed
+    echo [!] Checking dependenices ...
+    call :check_dependencies_are_installed 
+
 
     exit /b 0
 
+
+:cleanup
+    echo [*] Cleanup in progress ...
+    if exist external (
+        rd /s /q external
+        echo [!] external directory deleted!
+    )
+    echo [!] Cleanup done!
+    exit /b 0
 
 
 :check_dependencies_are_installed
@@ -40,7 +55,6 @@ set GLEW_URL=https://github.com/nigels-com/glew/releases/download/glew-2.2.0/gle
             if not exist %%x (
                 echo [!] %%x directory not found!
                 call :download_dependency %%x
-
             ) else (
                 echo [!] %%x folder found!
             )
@@ -48,11 +62,17 @@ set GLEW_URL=https://github.com/nigels-com/glew/releases/download/glew-2.2.0/gle
     popd
     exit /b 0
 
+:check_compiler_is_installed 
+
+    %CC_PATH% || echo [!] Compiler %CC% not found! && goto :EOF
+
+    echo [!] Compiler %CC% found!
+    exit /b 0
 
 :download_dependency
     echo [*] Installing %~1 ...
     call echo [!] link: %%%~1_URL%%%
-    call curl -L --output %~1.zip %%%~1_URL%%% 
+    call curl -L --output %~1.zip %%%~1_URL%%% && echo [!] Successfully downloaded %~1!
 
     mkdir %~1
     tar -xf %~1.zip -C %~1 --strip-components 1
@@ -60,6 +80,3 @@ set GLEW_URL=https://github.com/nigels-com/glew/releases/download/glew-2.2.0/gle
 
     exit /b 0
 
-
-:cleanup
-    exit /b 0
