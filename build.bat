@@ -13,16 +13,16 @@ REM Include compiler of choice (here its msvc)
 set CC=cl
 set CC_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
 set CC_DEFAULT_FLAGS=/std:c11 /W4 /wd4244 /wd4996 /wd5105 /FC /TC /Zi 
-set CC_DEFAULT_LIBS=opengl32.lib User32.lib Gdi32.lib Shell32.lib
+set CC_DEFAULT_LIBS=User32.lib Gdi32.lib Shell32.lib
 
 REM Source and executalble path (default)
 set EXE_DEFAULT_PATH=.\bin
-set SRC_DEFAULT_PATH=.\src
+set SRC_DEFAULT_PATH=.
 set DEPENDENCY_DEFAULT_PATH=.\external
 
-REM Source files and executable name
-set SRC_FILES=
-set EXE=
+REM Source files and exe name
+set SRC_FILES=test01.c
+set EXE=test.exe
 
 
 
@@ -41,7 +41,7 @@ set EXE=
     echo [*] Running build script for windows...
     
     echo [*] Checking %CC% compiler is installed ...
-    call :check_compiler_is_installed 
+    call :check_compiler_is_installed || goto :EOF
 
 
     echo [*] Checking if all dependenices are installed ...
@@ -53,7 +53,7 @@ set EXE=
     )
 
     echo [*] Checking dependenices ...
-    call :check_dependencies_are_installed 
+    call :check_dependencies_are_installed || goto :EOF
     echo [!] Dependencies all found!
 
     if exist bin (
@@ -65,15 +65,15 @@ set EXE=
     )
 
     echo [*] Building project ...
-    call :build_project_with_msvc
+    call :build_project_with_msvc || goto :EOF
 
     if %errorlevel% == 0 (
         echo [*] Running executable ...
-        call :run_executable
+        call :run_executable || goto :EOF
 
         if %errorlevel% neq 0 (
             echo [*] Running executable through the debugger ...
-            call :run_executable_with_debugger
+            call :run_executable_with_debugger || goto :EOF
         )
     )
     
@@ -91,15 +91,18 @@ REM                            v
 :build_project_with_msvc
     SETLOCAL
 
-    set INCLUDES_PATH=/I %DEPENDENCY_DEFAULT_PATH%\SDL2\include ^
+    set INCLUDES=/I %DEPENDENCY_DEFAULT_PATH%\SDL2\include ^
                     /I %DEPENDENCY_DEFAULT_PATH%\GLEW\include
+
+    set FLAGS=/DGLEW_STATIC 
 
     set LIBS=%DEPENDENCY_DEFAULT_PATH%\SDL2\lib\x64\SDL2.lib ^
                 %DEPENDENCY_DEFAULT_PATH%\SDL2\lib\x64\SDL2main.lib ^
-                %DEPENDENCY_DEFAULT_PATH%\GLEW\lib\Release\x64\glew32.lib
+                %DEPENDENCY_DEFAULT_PATH%\GLEW\lib\Release\x64\glew32s.lib ^
+                Opengl32.lib glu32.lib
 
-    cl %CC_DEFAULT_FLAGS% ^
-        %INCLUDES_PATH% ^
+    cl %CC_DEFAULT_FLAGS% %FLAGS%^
+        %INCLUDES% ^
         /Fe%EXE_DEFAULT_PATH%\%EXE% ^
         %SRC_DEFAULT_PATH%\%SRC_FILES% ^
         /link %CC_DEFAULT_LIBS% %LIBS% -SUBSYSTEM:windows
