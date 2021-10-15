@@ -21,7 +21,6 @@ function setup_envirnoment {
 
     rm -rf core
     ulimit -c unlimited
-    fi
 
 }
 
@@ -34,7 +33,7 @@ function cleanup_envirnoment {
 function compile_in_linux {
 
     local CC="gcc"
-    local FLAGS="-g -pedantic -W -Wall -Wextra -Wno-missing-braces"
+    local FLAGS="-std=c11 -g -W -Wall -Wextra -Wno-missing-braces -Wno-variadic-macros"
     local LINKERS="-lSDL2 -lGLEW -lGLU -lGL -lm"
 
     local FILE_PATH="$1"

@@ -12,7 +12,7 @@ set GLEW_URL=https://github.com/nigels-com/glew/releases/download/glew-2.2.0/gle
 REM Include compiler of choice (here its msvc)
 set CC=cl
 set CC_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
-set CC_DEFAULT_FLAGS=/W4 /WX /wd4996 /wd5105 /FC /TC /Zi 
+set CC_DEFAULT_FLAGS=/std:c11 /W4 /wd4244 /wd4996 /wd5105 /FC /TC /Zi 
 set CC_DEFAULT_LIBS=opengl32.lib User32.lib Gdi32.lib Shell32.lib
 
 REM Source and executalble path (default)
@@ -20,9 +20,9 @@ set EXE_DEFAULT_PATH=.\bin
 set SRC_DEFAULT_PATH=.\src
 set DEPENDENCY_DEFAULT_PATH=.\external
 
-REM Source files and exe name
-set SRC_FILES=test.c
-set EXE=test.exe
+REM Source files and executable name
+set SRC_FILES=
+set EXE=
 
 
 
