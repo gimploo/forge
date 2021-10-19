@@ -1,4 +1,5 @@
 @echo off
+SETLOCAL
 
 REM =============================================================================================
 REM                            -- WINDOWS BUILD SCRIPT FOR C PROJECTS --
@@ -29,19 +30,19 @@ set EXE=test.exe
 :main
     if "%1" == "deepclean" (
         call :deepcleanup
-        exit /b 0
+        goto :end
     )
 
     if "%1" == "clean" (
         call :cleanup
-        exit /b 0
+        goto :end
     )
 
     cls
     echo [*] Running build script for windows...
     
     echo [*] Checking %CC% compiler is installed ...
-    call :check_compiler_is_installed || goto :EOF
+    call :check_compiler_is_installed || goto :end
 
 
     echo [*] Checking if all dependenices are installed ...
@@ -53,7 +54,7 @@ set EXE=test.exe
     )
 
     echo [*] Checking dependenices ...
-    call :check_dependencies_are_installed || goto :EOF
+    call :check_dependencies_are_installed || goto :end
     echo [!] Dependencies all found!
 
     if exist bin (
@@ -65,21 +66,21 @@ set EXE=test.exe
     )
 
     echo [*] Building project ...
-    call :build_project_with_msvc || goto :EOF
+    call :build_project_with_msvc || goto :end
 
     if %errorlevel% == 0 (
         echo [*] Running executable ...
-        call :run_executable || goto :EOF
+        call :run_executable || goto :end
 
         if %errorlevel% neq 0 (
             echo [*] Running executable through the debugger ...
-            call :run_executable_with_debugger || goto :EOF
+            call :run_executable_with_debugger || goto :end
         )
     )
     
 
     echo [!] Exited! 
-    exit /b 0
+    goto :end
 
 
 REM ==================================================================================
@@ -158,7 +159,7 @@ REM ============================================================================
     exit /b 0
 
 :check_compiler_is_installed 
-    %CC_PATH% || echo [!] Compiler %CC% not found! && goto :EOF
+    %CC_PATH% || echo [!] Compiler %CC% not found! && goto :end
     echo [!] Compiler %CC% found!
     exit /b 0
 
@@ -181,3 +182,6 @@ REM ============================================================================
     echo [!] Successfully installed %~1!
     exit /b 0
 
+:end
+    ENDLOCAL
+    exit /b 0
