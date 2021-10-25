@@ -127,23 +127,6 @@ REM ============================================================================
     devenv /DebugExe %EXE_FOLDER_DEFAULT_PATH%\%EXE_FILE_NAME%
     exit /b 0
 
-:deepcleanup
-    echo [*] Cleanup in progress ...
-    if exist "%DEPENDENCY_DEFAULT_PATH%" (
-        rd /s /q "%DEPENDENCY_DEFAULT_PATH%"
-        echo [!] %DEPENDENCY_DEFAULT_PATH% directory deleted!
-    )
-    call :cleanup
-    echo [!] Cleanup done!
-    exit /b 0
-
-:cleanup
-    if exist bin (
-        rd /s /q bin
-        echo [!] bin directory deleted!
-    )
-    del /s *.pdb *.obj 2>nul
-    exit /b 0
 
 :check_dependencies_are_installed
     pushd %DEPENDENCY_DEFAULT_PATH%
@@ -182,6 +165,23 @@ REM ============================================================================
     echo [!] Successfully installed %~1!
     exit /b 0
 
+:deepcleanup
+    echo [*] Cleanup in progress ...
+    if exist "%DEPENDENCY_DEFAULT_PATH%" (
+        rd /s /q "%DEPENDENCY_DEFAULT_PATH%"
+        echo [!] %DEPENDENCY_DEFAULT_PATH% directory deleted!
+    )
+    call :cleanup
+    echo [!] Cleanup done!
+    exit /b 0
+
+:cleanup
+    if exist bin (
+        rd /s /q bin
+        echo [!] bin directory deleted!
+    )
+    del /s *.pdb *.obj 2>nul
+    exit /b 0
+
 :end
     ENDLOCAL
-    exit /b 0
