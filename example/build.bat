@@ -17,13 +17,13 @@ set CC_DEFAULT_FLAGS=/std:c11 /W4 /wd4244 /wd4996 /wd5105 /FC /TC /Zi
 set CC_DEFAULT_LIBS=User32.lib Gdi32.lib Shell32.lib
 
 REM Source and executalble path (default)
-set EXE_DEFAULT_PATH=.\bin
-set SRC_DEFAULT_PATH=.\src
+set EXE_FOLDER_DEFAULT_PATH=.\bin
+set SRC_FOLDER_DEFAULT_PATH=.\src
 set DEPENDENCY_DEFAULT_PATH=.\external
 
 REM Source files and exe name
-set SRC_FILES=test.c
-set EXE=test.exe
+set SRC_FILE_NAME=test.c
+set EXE_FILE_NAME=test.exe
 
 
 
@@ -104,8 +104,8 @@ REM                            v
 
     cl %CC_DEFAULT_FLAGS% %FLAGS%^
         %INCLUDES% ^
-        /Fe%EXE_DEFAULT_PATH%\%EXE% ^
-        %SRC_DEFAULT_PATH%\%SRC_FILES% ^
+        /Fe%EXE_FOLDER_DEFAULT_PATH%\%EXE_FILE_NAME% ^
+        %SRC_FOLDER_DEFAULT_PATH%\%SRC_FILE_NAME% ^
         /link %CC_DEFAULT_LIBS% %LIBS% -SUBSYSTEM:windows
 
 
@@ -120,11 +120,11 @@ REM                             -- HELPER FUNCTIONS --
 REM =======================================================================================
     
 :run_executable
-    %EXE_DEFAULT_PATH%\%EXE%
+    %EXE_FOLDER_DEFAULT_PATH%\%EXE_FILE_NAME%
     exit /b %errorlevel% 
 
 :run_executable_with_debugger
-    devenv /DebugExe %EXE_DEFAULT_PATH%\%EXE%
+    devenv /DebugExe %EXE_FOLDER_DEFAULT_PATH%\%EXE_FILE_NAME%
     exit /b 0
 
 :deepcleanup
