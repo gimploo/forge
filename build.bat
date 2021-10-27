@@ -18,11 +18,11 @@ set CC_DEFAULT_LIBS=User32.lib Gdi32.lib Shell32.lib
 
 REM Source and executalble path (default)
 set EXE_FOLDER_DEFAULT_PATH=.\bin
-set SRC_FOLDER_DEFAULT_PATH=.
+set SRC_FOLDER_DEFAULT_PATH=.\src
 set DEPENDENCY_DEFAULT_PATH=.\external
 
 REM Source files and exe name
-set SRC_FILE_NAME=test01.c
+set SRC_FILE_NAME=test.c
 set EXE_FILE_NAME=test.exe
 
 
@@ -90,7 +90,6 @@ REM (change whats in here to ) -
 REM                            |
 REM                            v
 :build_project_with_msvc
-    SETLOCAL
 
     set INCLUDES=/I %DEPENDENCY_DEFAULT_PATH%\SDL2\include ^
                     /I %DEPENDENCY_DEFAULT_PATH%\GLEW\include
@@ -109,7 +108,6 @@ REM                            v
         /link %CC_DEFAULT_LIBS% %LIBS% -SUBSYSTEM:windows
 
 
-    ENDLOCAL
     exit /b %errorlevel%
 
 
@@ -181,7 +179,9 @@ REM ============================================================================
         echo [!] bin directory deleted!
     )
     del /s *.pdb *.obj 2>nul
+    echo [!] Removed obj files and pdb
     exit /b 0
 
 :end
+    echo [!] Script exiting!
     ENDLOCAL
