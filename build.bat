@@ -28,15 +28,17 @@ set EXE_FILE_NAME=test.exe
 
 
 :main
-    if "%1" == "deepclean" (
-        call :deepcleanup
-        goto :end
-    )
 
     if "%1" == "clean" (
         call :cleanup
         goto :end
     )
+
+    if "%1" == "deepclean" (
+        call :deepcleanup
+        goto :end
+    )
+
 
     cls
     echo [*] Running build script for windows...
@@ -107,6 +109,9 @@ REM                            v
         %SRC_FOLDER_DEFAULT_PATH%\%SRC_FILE_NAME% ^
         /link %CC_DEFAULT_LIBS% %LIBS% -SUBSYSTEM:windows
 
+    move *.pdb %EXE_FOLDER_DEFAULT_PATH% >nul
+    move *.obj %EXE_FOLDER_DEFAULT_PATH% >nul
+
 
     exit /b %errorlevel%
 
@@ -163,6 +168,13 @@ REM ============================================================================
     echo [!] Successfully installed %~1!
     exit /b 0
 
+:cleanup
+    if exist bin (
+        rd /s /q bin
+        echo [!] bin directory deleted!
+    )
+    exit /b 0
+
 :deepcleanup
     echo [*] Cleanup in progress ...
     if exist "%DEPENDENCY_DEFAULT_PATH%" (
@@ -173,14 +185,6 @@ REM ============================================================================
     echo [!] Cleanup done!
     exit /b 0
 
-:cleanup
-    if exist bin (
-        rd /s /q bin
-        echo [!] bin directory deleted!
-    )
-    del /s *.pdb *.obj 2>nul
-    echo [!] Removed obj files and pdb
-    exit /b 0
 
 :end
     echo [!] Script exiting!
