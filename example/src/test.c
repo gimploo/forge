@@ -28,7 +28,8 @@ int main (int argc, char * argv[])
   SDL_GL_CreateContext(Window);
 
   /*int *foo = NULL;*/
-  /*printf("%i", *foo);*/
+  printf("Prinf says hello\n");
+  SDL_Log("SDL_Log says hello\n");
   
   b32 Running = 1;
   b32 FullScreen = 0;

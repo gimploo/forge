@@ -1,0 +1,4 @@
+
+*.obj
+**external/
+**bin/
