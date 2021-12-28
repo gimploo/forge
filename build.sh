@@ -1,21 +1,27 @@
 #!/bin/bash
+# =============================================================================================
+#                            -- LINUX BUILD SCRIPT FOR C PROJECTS --
+# =============================================================================================
+
+
+SRC_PATH="test01.c"
+EXE_NAME="./test01"
+
+CC="gcc"
+FLAGS="-std=c11 -g -W -Wall -Wextra -Wno-missing-braces -Wno-variadic-macros"
+LINKERS="-lSDL2 -lGLEW -lGLU -lGL -lm"
+
+
+
+
+# =============================================================================================
+#                            -- IMPLEMENTATION (BELOW) --
+# =============================================================================================
 
 red=$(tput setaf 1)
 green=$(tput bold; tput setaf 2)
 blue=$(tput bold; tput setaf 4)
 reset=$(tput sgr0)
-
-# =================================================================
-# CHANGE THIS _
-#              |
-#              v
-
-SRC_PATH="test01.c"
-EXE_PATH="./test01"
-BIN_DIR="./"
-
-#=====================================================================
-
 
 function setup_envirnoment {
 
@@ -32,27 +38,21 @@ function cleanup_envirnoment {
 
 function compile_in_linux {
 
-    local CC="gcc"
-    local FLAGS="-std=c11 -g -W -Wall -Wextra -Wno-missing-braces -Wno-variadic-macros"
-    local LINKERS="-lSDL2 -lGLEW -lGLU -lGL -lm"
-
     local FILE_PATH="$1"
 
-    $CC $FILE_PATH $FLAGS $LINKERS -o $EXE_PATH
+    $CC $FILE_PATH $FLAGS $LINKERS -o ./bin/$EXE_NAME
 
 }
 
 function gdb_debug {
 
-    local TMP=gdb_debug_txt_file
-
     if [ -f "core" ] 
     then
         echo -e "[*] ${blue}Core dump found, running with core dump ... ${reset}"
-        gdb --core=core --silent --tui "$EXE_PATH"
+        gdb --core=core --silent --tui ./bin/"$EXE_NAME"
     else 
         echo -e "[*] ${blue}Core Dump not found, running without core dump ... ${reset}"
-        gdb --silent --tui "$EXE_PATH"
+        gdb --silent --tui ./bin/"$EXE_NAME"
     fi
 
     return 0
@@ -60,16 +60,18 @@ function gdb_debug {
 
 function run_profiler {
 
-    time $EXE_PATH
+    time ./bin/$EXE_NAME
 }
 
 function main {
+
+    local BIN_DIR="./bin"
 
     # Cleaning bin directory
     if [ "$1" == "clean" ]
     then
         echo -e "[!] ${green}Cleaning bin/ directory${reset}"
-        rm -rf $EXE_PATH
+        rm -rf ./bin/$EXE_NAME
         echo -e "[!] ${green}Removing coredumps${reset}\n"
         rm -f core
         exit 0
@@ -79,7 +81,6 @@ function main {
     # Set environment
     echo -e "[!] ${green}Setting up environment${reset}"
     setup_envirnoment
-
 
     # Checking if bin directory is made
     if [ ! -d "$BIN_DIR" ] 
