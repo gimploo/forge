@@ -13,7 +13,7 @@ set GLEW_URL=https://github.com/nigels-com/glew/releases/download/glew-2.2.0/gle
 REM Include compiler of choice (here its msvc)
 set CC=cl
 set CC_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
-set CC_DEFAULT_FLAGS=/std:c11 /W4 /wd4244 /wd4996 /wd5105 /wd4267 /FC /TC /Zi 
+set CC_DEFAULT_FLAGS=/std:c11 /W4 /wd4244 /wd4996 /wd4477 /wd4267 /FC /TC /Zi 
 set CC_DEFAULT_LIBS=User32.lib Gdi32.lib Shell32.lib
 
 REM Source and executalble path (default)
@@ -56,7 +56,7 @@ set EXE_FILE_NAME=test.exe
     )
 
     echo [*] Checking dependenices ...
-    call :check_dependencies_are_installed || goto :end
+    call :check_dependencies_are_installed
     echo [!] Dependencies all found!
 
     if exist bin (
@@ -72,16 +72,10 @@ set EXE_FILE_NAME=test.exe
 
     if %errorlevel% == 0 (
         echo [*] Running executable ...
-        call :run_executable || goto :end
-
-        if %errorlevel% neq 0 (
-            echo [*] Running executable through the debugger ...
-            call :run_executable_with_debugger || goto :end
-        )
+        call :run_executable
+        echo [!] Exited! 
     )
-    
 
-    echo [!] Exited! 
     goto :end
 
 
@@ -107,7 +101,7 @@ REM                            v
         %INCLUDES% ^
         /Fe%EXE_FOLDER_DEFAULT_PATH%\%EXE_FILE_NAME% ^
         %SRC_FOLDER_DEFAULT_PATH%\%SRC_FILE_NAME% ^
-        /link %CC_DEFAULT_LIBS% %LIBS% -SUBSYSTEM:console
+        /link %CC_DEFAULT_LIBS% %LIBS% -SUBSYSTEM:console || echo [!] Failed to compile! && exit /b 1
 
     move *.pdb %EXE_FOLDER_DEFAULT_PATH% >nul
     move *.obj %EXE_FOLDER_DEFAULT_PATH% >nul
@@ -123,10 +117,11 @@ REM                             -- HELPER FUNCTIONS --
 REM =======================================================================================
     
 :run_executable
-    %EXE_FOLDER_DEFAULT_PATH%\%EXE_FILE_NAME%
+    %EXE_FOLDER_DEFAULT_PATH%\%EXE_FILE_NAME% || goto :run_executable_with_debugger
     exit /b %errorlevel% 
 
 :run_executable_with_debugger
+    echo [*] Running executable through the debugger ...
     devenv /DebugExe %EXE_FOLDER_DEFAULT_PATH%\%EXE_FILE_NAME%
     exit /b 0
 

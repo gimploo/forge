@@ -30,7 +30,7 @@ int main (int argc, char * argv[])
   /*int *foo = NULL;*/
   printf("Prinf says hello\n");
   SDL_Log("SDL_Log says hello\n");
-  
+
   b32 Running = 1;
   b32 FullScreen = 0;
   while (Running)
