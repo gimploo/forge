@@ -76,7 +76,7 @@ function main {
         Types of tags
         -------------
             help    - prints the usage
-            run     - runs the executable after compilation      
+            compile - only compiles and not run the exe after
             debug   - runs the executable in a debugger after compilation
 
         "
@@ -110,42 +110,45 @@ function main {
     fi
 
     # Compiling source files
-    echo -e "[*] ${blue}Compiling source file ...${reset}\n"
+    echo -e "[*] ${blue}Compiling source file ...${reset}"
 
     if ! compile_in_linux $SRC_PATH ;
     then 
         echo -e "[!] ${red}Compilation Failed ${reset}"
         exit $LINENO
     else 
-        echo -e "\n[!] ${green}Compilation Successfull ${reset}"
+        echo -e "[!] ${green}Compilation Successfull ${reset}"
     fi
 
-
-    # Running executable
-
-    if [ "$1" == "run" ] 
+    # Running it through the debugger
+    if [ "$1" == "debug" ]
     then
-        echo -e "[*] ${blue}Running executable ...\n${reset}"
-        run_profiler 
-    fi
-
-
-    # If seg faults run it throught debugger
-    if [ $? -eq 139 ] || [ "$1" == "debug" ]
-    then
-        echo -e "\n[!] ${red} Segmentation Fault Occurred ${reset}"
         echo -e "\n[*] ${blue}Running executable through debugger ...${reset}"
         gdb_debug
         echo -e "[!] ${green}Exiting debugger ${reset}"
+        exit 0
     fi
+
+    # Running executable
+    if [ "$1" != "compile" ]
+    then
+        echo -e "[*] ${blue}Running executable ...\n${reset}"
+        run_profiler 
+        if [ $? -eq 139 ]
+        then
+            echo -e "\n[!] ${red} Segmentation Fault Occurred ${reset}"
+            echo -e "\n[*] ${blue}Running executable through debugger ...${reset}"
+            gdb_debug
+            echo -e "[!] ${green}Exiting debugger ${reset}"
+        fi
+    fi
+
 
 
     # Reseting environment
     echo -e "[!] ${green}Cleaning up environment ${reset}"
     cleanup_envirnoment
 
-
-    echo -e ""
     exit 0
 }
 
