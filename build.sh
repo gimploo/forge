@@ -4,8 +4,8 @@
 # =============================================================================================
 
 
-SRC_PATH="test01.c"
-EXE_NAME="./test01"
+SRC_PATH="./src/test.c"
+EXE_NAME="test"
 
 CC="gcc"
 FLAGS="-std=c11 -g -W -Wall -Wextra -Wno-missing-braces -Wno-variadic-macros"
@@ -65,6 +65,24 @@ function run_profiler {
 
 function main {
 
+    if [ "$1" == "help" ] 
+    then
+        echo -e "
+
+        Usage: ./build.sh <tag>
+
+        Builds the project using gcc or specified compiler
+
+        Types of tags
+        -------------
+            help    - prints the usage
+            run     - runs the executable after compilation      
+            debug   - runs the executable in a debugger after compilation
+
+        "
+        exit 0
+    fi
+
     local BIN_DIR="./bin"
 
     # Cleaning bin directory
@@ -104,12 +122,16 @@ function main {
 
 
     # Running executable
-    echo -e "[*] ${blue}Running executable ...\n${reset}"
-    run_profiler 
+
+    if [ "$1" == "run" ] 
+    then
+        echo -e "[*] ${blue}Running executable ...\n${reset}"
+        run_profiler 
+    fi
 
 
     # If seg faults run it throught debugger
-    if [ $? -ne 0 ]
+    if [ $? -eq 139 ] || [ "$1" == "debug" ]
     then
         echo -e "\n[!] ${red} Segmentation Fault Occurred ${reset}"
         echo -e "\n[*] ${blue}Running executable through debugger ...${reset}"
