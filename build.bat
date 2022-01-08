@@ -70,7 +70,12 @@ set EXE_FILE_NAME=test.exe
     echo [*] Building project (DEBUG BUILD)...
     call :build_project_with_msvc || goto :end
 
-    if %errorlevel% == 0 (
+    if "%1" == "debug" (
+        call :run_executable_with_debugger
+        goto :end
+    )
+
+    if "%1" == "run" (
         echo [*] Running executable ...
         call :run_executable
         echo [!] Exited! 
@@ -117,7 +122,7 @@ REM                             -- HELPER FUNCTIONS --
 REM =======================================================================================
     
 :run_executable
-    %EXE_FOLDER_DEFAULT_PATH%\%EXE_FILE_NAME% || goto :run_executable_with_debugger
+    %EXE_FOLDER_DEFAULT_PATH%\%EXE_FILE_NAME%
     exit /b %errorlevel% 
 
 :run_executable_with_debugger
