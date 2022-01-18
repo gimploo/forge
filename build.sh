@@ -8,7 +8,7 @@ SRC_PATH="./src/test.c"
 EXE_NAME="test"
 
 CC="gcc"
-FLAGS="-std=c11 -g -W -Wall -Wextra -Wno-missing-braces -Wno-variadic-macros"
+FLAGS="-std=c11 -g -W -Wall -Wextra -Wno-missing-braces -Wno-variadic-macros -rdynamic"
 LINKERS="-lSDL2 -lGLEW -lGLU -lGL -lm"
 
 
