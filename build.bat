@@ -65,6 +65,7 @@ set EXE_FILE_NAME=test.exe
     ) else (
         echo [!] Bin directory not found!
         mkdir bin
+        call :copy_all_dlls_to_bin
         echo [!] Bin directory made!
     )
 
@@ -152,6 +153,15 @@ REM ============================================================================
 :check_compiler_is_installed 
     %CC_PATH% || echo [!] Compiler %CC% not found! && goto :end
     echo [!] Compiler %CC% found!
+    exit /b 0
+
+:copy_all_dlls_to_bin
+    echo [*] Copying all DLLs to bin ...
+
+    REM ADD New dlls here! 
+
+    copy %DEPENDENCY_DEFAULT_PATH%\SDL2\lib\x64\SDL2.dll %EXE_FOLDER_DEFAULT_PATH% >nul
+
     exit /b 0
 
 :download_dependency
