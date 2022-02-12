@@ -11,6 +11,9 @@ set SDL2_URL=https://www.libsdl.org/release/SDL2-devel-2.0.20-VC.zip
 set GLEW_URL=https://github.com/nigels-com/glew/releases/download/glew-2.2.0/glew-2.2.0-win32.zip
 set FREETYPE_URL=https://github.com/ubawurinna/freetype-windows-binaries/archive/refs/heads/master.zip
 
+REM Url to my library
+set POGLIB_URL=https://github.com/gimploo/poglib/archive/refs/heads/main.zip
+
 REM Include compiler of choice (here its msvc)
 set CC=cl
 set CC_PATH="C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
@@ -67,6 +70,15 @@ set EXE_FILE_NAME=test.exe
         mkdir bin
         call :copy_all_dlls_to_bin
         echo [!] Bin directory made!
+    )
+
+    echo [*] Checking for lib folder ...
+    if exist lib (
+        echo [!] lib folder found!
+    ) else (
+        echo [!] lib folder not found!
+        call :setup_poglib
+        echo [!] lib folder setup finished!
     )
 
     echo [*] Building project [DEBUG BUILD]...
@@ -136,6 +148,12 @@ REM ============================================================================
     devenv /DebugExe %EXE_FOLDER_DEFAULT_PATH%\%EXE_FILE_NAME%
     exit /b 0
 
+:setup_poglib
+    echo [!] Setting up poglib ...
+    call curl -L --output main.zip %POGLIB_URL% 
+    mkdir lib
+    tar -xf main.zip -C lib --strip-components 1 && del main.zip
+    exit /b 0
 
 :check_dependencies_are_installed
     pushd %DEPENDENCY_DEFAULT_PATH%
@@ -157,9 +175,11 @@ REM ============================================================================
 
 :copy_all_dlls_to_bin
     echo [*] Copying all DLLs to bin ...
+
+    REM ADD New dlls here! 
+
     copy %DEPENDENCY_DEFAULT_PATH%\SDL2\lib\x64\SDL2.dll %EXE_FOLDER_DEFAULT_PATH% >nul
 
-    echo done
     exit /b 0
 
 :download_dependency
@@ -195,6 +215,8 @@ REM ============================================================================
         rd /s /q bin
         echo [!] bin directory deleted!
     )
+    rd /s /q lib
+    echo [!] lib directory deleted!
     exit /b 0
 
 :deepcleanup
