@@ -63,13 +63,14 @@ set EXE_FILE_NAME=test.exe
     call :check_dependencies_are_installed
     echo [!] Dependencies all found!
 
+    echo [*] Checking for bin folder ...
     if exist bin (
-        echo [!] Bin directory found!
+        echo [!] bin directory found!
     ) else (
-        echo [!] Bin directory not found!
+        echo [!] bin directory not found!
         mkdir bin
         call :copy_all_dlls_to_bin
-        echo [!] Bin directory made!
+        echo [!] bin directory made!
     )
 
     echo [*] Checking for lib folder ...
@@ -212,11 +213,9 @@ REM ============================================================================
 
 :cleanup
     if exist bin (
-        rd /s /q bin
-        echo [!] bin directory deleted!
+        rd /s /q bin || echo [!] bin folder not found! && echo [!] bin directory deleted!
     )
-    rd /s /q lib
-    echo [!] lib directory deleted!
+    rd /s /q lib || echo [!] lib folder not found!  && echo [!] lib folder deleted!
     exit /b 0
 
 :deepcleanup
