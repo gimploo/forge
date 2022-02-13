@@ -6,11 +6,11 @@
 
 SRC_PATH="./src/test.c"
 EXE_NAME="test"
+DEPENDENCIES="libsdl2-dev libfreetype-dev libglew-dev"
 
 CC="gcc"
 FLAGS="-std=c11 -g -W -Wall -Wextra -Wno-missing-braces -Wno-variadic-macros -rdynamic"
 LINKERS="-lSDL2 -lGLEW -lGLU -lGL -lm"
-
 
 
 
@@ -83,20 +83,33 @@ function main {
         exit 0
     fi
 
+
+    echo " "
+
     local BIN_DIR="./bin"
     local LIB_DIR="./lib"
 
     # Cleaning bin directory
     if [ "$1" == "clean" ]
     then
-        echo -e "[!] ${green}Cleaning bin/ directory${reset}"
-        rm -rf ./bin/$EXE_NAME
-        echo -e "[!] ${green}Cleaning lib/ directory${reset}"
-        rm -rf lib
-        echo -e "[!] ${green}Removing coredumps${reset}\n"
+        echo -e "[!] ${green}Cleaning $BIN_DIR directory${reset}"
+        rm -rf $BIN_DIR 2> /dev/null
+        echo -e "[!] ${green}Cleaning $LIB_DIR directory${reset}"
+        rm -rf $LIB_DIR 2> /dev/null
+        echo -e "[!] ${green}Removing coredumps${reset}"
         rm -f core
+
+        echo " "
         exit 0
     fi
+
+    # Checking for dependencies
+    echo -e "[*] ${blue}Checking for dependencies ... ${reset}"
+    for depend in $DEPENDENCIES; do
+        echo -e "[*] ${blue}Checking for $depend ... ${reset}"
+        sudo apt-get install $depend -y > /dev/null
+    done
+    echo -e "[!] ${green}Dependencies are installed! ${reset}"
 
 
     # Set environment
@@ -115,8 +128,13 @@ function main {
     # Checking if lib directory is made
     if [ ! -d "$LIB_DIR" ] 
     then
-        echo -e "[!] ${green}Creating directory ${reset}\`$LIB_DIR\`"
-        git clone https://github.com/gimploo/poglib.git $LIB_DIR
+        echo -e "[!] ${green}Creating directory ${reset}\`$LIB_DIR\` (poglib)"
+        if [ $(whoami) == "gokul" ]
+        then
+            ln -s ~/Documents/projects/poglib lib
+        else
+            git clone https://github.com/gimploo/poglib.git $LIB_DIR > /dev/null
+        fi
     else 
         echo -e "[!] ${green}Found directory ${reset}\`$LIB_DIR\`" 
     fi
@@ -161,6 +179,7 @@ function main {
     echo -e "[!] ${green}Cleaning up environment ${reset}"
     cleanup_envirnoment
 
+    echo " "
     exit 0
 }
 
