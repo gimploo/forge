@@ -6,7 +6,7 @@
 
 SRC_PATH="./src/test.c"
 EXE_NAME="test"
-DEPENDENCIES="libsdl2-dev libfreetype-dev libglew-dev"
+DEPENDENCIES="libsdl2-dev freetype* libglew-dev"
 
 CC="gcc"
 FLAGS="-std=c11 -g -W -Wall -Wextra -Wno-missing-braces -Wno-variadic-macros -rdynamic"
