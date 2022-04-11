@@ -2,3 +2,5 @@
 *.obj
 **external/
 **bin/
+example/build.bat
+example/lib/
