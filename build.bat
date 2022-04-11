@@ -47,15 +47,15 @@ set EXE_FILE_NAME=test.exe
     cls
     echo [*] Running build script for windows...
     
-    echo [*] Checking %CC% compiler is installed ...
+    echo [*] Checking `%CC%` compiler is installed ...
     call :check_compiler_is_installed || goto :end
 
 
     echo [*] Checking if all dependenices are installed ...
     if exist "%DEPENDENCY_DEFAULT_PATH%" (
-        echo [!] External directory found!
+ a      echo [!] `external` directory found!
     ) else (
-        echo [!] External directory not found!
+        echo [!] `external` directory not found!
         mkdir "%DEPENDENCY_DEFAULT_PATH%"
     )
 
@@ -63,33 +63,45 @@ set EXE_FILE_NAME=test.exe
     call :check_dependencies_are_installed
     echo [!] Dependencies all found!
 
-    echo [*] Checking for bin folder ...
+    echo [*] Checking for `bin` folder ...
     if exist bin (
-        echo [!] bin directory found!
+        echo [!] `bin` directory found!
     ) else (
-        echo [!] bin directory not found!
+        echo [!] `bin` directory not found!
         mkdir bin
         call :copy_all_dlls_to_bin
-        echo [!] bin directory made!
+        echo [!] `bin` directory made!
     )
 
-    echo [*] Checking for lib folder ...
+    echo [*] Checking for `lib` folder ...
     if exist lib (
-        echo [!] lib folder found!
+        echo [!] `lib` folder found!
     ) else (
-        echo [!] lib folder not found!
+        echo [!] `lib` folder not found!
         call :setup_poglib
-        echo [!] lib folder setup finished!
+        echo [!] `lib` folder setup finished!
     )
 
-    echo [*] Building project [DEBUG BUILD]...
-    call :build_project_with_msvc || goto :end
+    REM EITHER A RELEASE BUILD OR A DEBUG BUILD
+    if "%1" == "release" (
+        echo [*] Building project [RELEASE BUILD]...
+        call :build_project_with_msvc "release" || goto :end
+        echo [*] Running executable ...
+        call :run_executable
+        echo [!] Exited! 
+    ) else (
+        echo [*] Building project [DEBUG BUILD]...
+        call :build_project_with_msvc "debug" || goto :end
+    )
 
+
+    REM RUNS THE EXECUTABLE THROUGH A DEBUGGER (ONLY DEBUG BUILD)
     if "%1" == "debug" (
         call :run_executable_with_debugger
         goto :end
     )
 
+    REM RUNS THE EXECUTABLE NORMALLY (ONLY DEBUG BUILD)
     if "%1" == "run" (
         echo [*] Running executable ...
         call :run_executable
@@ -109,9 +121,14 @@ REM                            v
 
     set INCLUDES=/I %DEPENDENCY_DEFAULT_PATH%\SDL2\include ^
                     /I %DEPENDENCY_DEFAULT_PATH%\GLEW\include ^
-                    /I %DEPENDENCY_DEFAULT_PATH%\FREETYPE\include 
+                    /I %DEPENDENCY_DEFAULT_PATH%\FREETYPE\include
 
-    set FLAGS=/DGLEW_STATIC /DDEBUG
+
+    if "%~1" == "debug" (
+        set FLAGS=/DGLEW_STATIC /DDEBUG
+    ) else (
+        set FLAGS=/DGLEW_STATIC 
+    )
 
     set LIBS=%DEPENDENCY_DEFAULT_PATH%\SDL2\lib\x64\SDL2.lib ^
                 %DEPENDENCY_DEFAULT_PATH%\SDL2\lib\x64\SDL2main.lib ^
@@ -151,6 +168,12 @@ REM ============================================================================
 
 :setup_poglib
     echo [!] Setting up poglib ...
+
+    if "%USERNAME%" == "gokul" (
+        mklink /j lib C:\Users\User\OneDrive\Documents\projects\poglib
+        exit /b 0
+    )
+
     call curl -L --output main.zip %POGLIB_URL% 
     mkdir lib
     tar -xf main.zip -C lib --strip-components 1 && del main.zip
@@ -160,10 +183,10 @@ REM ============================================================================
     pushd %DEPENDENCY_DEFAULT_PATH%
         for %%x in (%DEPENDENCY_LIST%) do (
             if not exist %%x (
-                echo [!] %%x directory not found!
+                echo [!] `%%x` directory not found!
                 call :download_dependency %%x
             ) else (
-                echo [!] %%x folder found!
+                echo [!] `%%x` folder found!
             )
         )
     popd
@@ -213,19 +236,24 @@ REM ============================================================================
 
 :cleanup
     if exist bin (
-        rd /s /q bin || echo [!] bin folder not found!
-        echo [!] bin directory deleted!
+        rd /s /q bin || echo [!] `bin` folder not found!
+        echo [!] `bin` directory deleted!
     )
-    rd /s /q lib || echo [!] lib folder not found! 
-    echo [!] lib folder deleted!
     exit /b 0
 
 :deepcleanup
     echo [*] Cleanup in progress ...
     if exist "%DEPENDENCY_DEFAULT_PATH%" (
         rd /s /q "%DEPENDENCY_DEFAULT_PATH%"
-        echo [!] %DEPENDENCY_DEFAULT_PATH% directory deleted!
+        echo [!] `%DEPENDENCY_DEFAULT_PATH%` directory deleted!
     )
+
+    if exist lib (
+        echo [*] Removing library folder ...
+        rmdir lib
+        echo [!] `lib` folder deleted!
+    )
+
     call :cleanup
     echo [!] Cleanup done!
     exit /b 0
