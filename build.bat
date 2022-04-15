@@ -180,6 +180,12 @@ REM ============================================================================
     exit /b 0
 
 :check_dependencies_are_installed
+
+    if "%USERNAME%" == "gokul" (
+        mklink /j external C:\Users\User\OneDrive\Documents\projects\poglib\external
+        exit /b 0
+    )
+
     pushd %DEPENDENCY_DEFAULT_PATH%
         for %%x in (%DEPENDENCY_LIST%) do (
             if not exist %%x (
