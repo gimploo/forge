@@ -53,15 +53,14 @@ set EXE_FILE_NAME=test.exe
 
     echo [*] Checking if all dependenices are installed ...
     if exist "%DEPENDENCY_DEFAULT_PATH%" (
- a      echo [!] `external` directory found!
+        echo [!] `external` directory found!
     ) else (
         echo [!] `external` directory not found!
-        mkdir "%DEPENDENCY_DEFAULT_PATH%"
+        echo [*] Checking dependenices ...
+        call :check_dependencies_are_installed
+        echo [!] Dependencies all found!
     )
 
-    echo [*] Checking dependenices ...
-    call :check_dependencies_are_installed
-    echo [!] Dependencies all found!
 
     echo [*] Checking for `bin` folder ...
     if exist bin (
@@ -185,6 +184,8 @@ REM ============================================================================
         mklink /j external C:\Users\User\OneDrive\Documents\projects\poglib\external
         exit /b 0
     )
+
+    mkdir "%DEPENDENCY_DEFAULT_PATH%"
 
     pushd %DEPENDENCY_DEFAULT_PATH%
         for %%x in (%DEPENDENCY_LIST%) do (
