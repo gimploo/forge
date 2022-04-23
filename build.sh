@@ -11,7 +11,7 @@ DEPENDENCIES="libsdl2-dev freetype* libglew-dev"
 CC="gcc"
 FLAGS="-std=c11 -g -W -Wall -Wextra -Wno-missing-braces -Wno-variadic-macros -rdynamic"
 LINKERS="-lfreetype -lSDL2 -lGLEW -lGLU -lGL -lm"
-INCLUDES="-I/usr/include/freetype2 "
+INCLUDES="-I/usr/include/freetype2 -I./lib/"
 
 
 
