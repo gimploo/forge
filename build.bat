@@ -111,7 +111,7 @@ REM                            v
     set INCLUDES=/I %LIBRARY_DEFAULT_PATH%\SDL2\include ^
                     /I %LIBRARY_DEFAULT_PATH%\GLEW\include ^
                     /I %LIBRARY_DEFAULT_PATH%\FREETYPE\include ^
-                    /I %LIBRARY_DEFAULT_PATH%\poglib
+                    /I %LIBRARY_DEFAULT_PATH%\
 
 
     if "%~1" == "debug" (
@@ -156,26 +156,7 @@ REM ============================================================================
     devenv /DebugExe %EXE_FOLDER_DEFAULT_PATH%\%EXE_FILE_NAME%
     exit /b 0
 
-:setup_poglib
-    echo [!] Setting up poglib ...
-
-    if "%USERNAME%" == "gokul" (
-        mklink /j poglib C:\Users\User\OneDrive\Documents\projects\poglib
-        move poglib lib
-        exit /b 0
-    )
-
-    call curl -L --output main.zip %POGLIB_URL% 
-    tar -xf main.zip -C .\lib --strip-components 1 && del main.zip
-    exit /b 0
-
 :check_dependencies_are_installed
-
-    if "%USERNAME%" == "gokul" (
-        mklink /j lib C:\Users\User\OneDrive\Documents\projects\poglib\external
-        call :setup_poglib
-        exit /b 0
-    )
 
     mkdir "%LIBRARY_DEFAULT_PATH%"
 
@@ -228,6 +209,10 @@ REM ============================================================================
             move "lib\vs2015-2022\win32" lib\ >nul
             rd /s /q "lib\vs2015-2022"
         popd
+    )
+
+    if "%~1" == "POGLIB" (
+        rename "POGLIB" poglib
     )
 
     echo [!] Successfully installed %~1!
