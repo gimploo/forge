@@ -233,7 +233,7 @@ REM ============================================================================
     echo [*] Cleanup in progress ...
     if exist "%LIBRARY_DEFAULT_PATH%" (
         if "%USERNAME%" == "gokul" (
-            mklink /d "%LIBRARY_DEFAULT_PATH%"
+            rmdir "%LIBRARY_DEFAULT_PATH%"
         ) else (
             rd /s /q "%LIBRARY_DEFAULT_PATH%"
         )
