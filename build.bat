@@ -56,7 +56,11 @@ set EXE_FILE_NAME=test.exe
     ) else (
         echo [!] `lib` directory not found!
         echo [*] Checking dependenices ...
-        call :check_dependencies_are_installed
+        if "%USERNAME% == "gokul" (
+            mklink /j "%LIBRARY_DEFAULT_PATH%" C:\Users\User\OneDrive\Documents\projects\dev-libs
+        ) else (
+            call :check_dependencies_are_installed
+        )
         echo [!] Dependencies all found!
     )
 
