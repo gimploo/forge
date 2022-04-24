@@ -228,7 +228,7 @@ REM ============================================================================
 :deepcleanup
     echo [*] Cleanup in progress ...
     if exist "%LIBRARY_DEFAULT_PATH%" (
-        rd /s /q "%LIBRARY_DEFAULT_PATH%"
+        mklink /d "%LIBRARY_DEFAULT_PATH%"
         echo [!] `%LIBRARY_DEFAULT_PATH%` directory deleted!
     )
 
