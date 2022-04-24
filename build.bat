@@ -56,7 +56,7 @@ set EXE_FILE_NAME=test.exe
     ) else (
         echo [!] `lib` directory not found!
         echo [*] Checking dependenices ...
-        if "%USERNAME% == "gokul" (
+        if "%USERNAME%" == "gokul" (
             mklink /j "%LIBRARY_DEFAULT_PATH%" C:\Users\User\OneDrive\Documents\projects\dev-libs
         ) else (
             call :check_dependencies_are_installed
@@ -232,7 +232,11 @@ REM ============================================================================
 :deepcleanup
     echo [*] Cleanup in progress ...
     if exist "%LIBRARY_DEFAULT_PATH%" (
-        mklink /d "%LIBRARY_DEFAULT_PATH%"
+        if "%USERNAME%" == "gokul" (
+            mklink /d "%LIBRARY_DEFAULT_PATH%"
+        ) else (
+            rd /s /q "%LIBRARY_DEFAULT_PATH%"
+        )
         echo [!] `%LIBRARY_DEFAULT_PATH%` directory deleted!
     )
 
