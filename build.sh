@@ -9,7 +9,7 @@ EXE_NAME="test"
 DEPENDENCIES="libsdl2-dev freetype* libglew-dev"
 
 CC="gcc"
-FLAGS="-std=c11 -g -W -Wall -Wextra -Wno-missing-braces -Wno-variadic-macros -rdynamic"
+FLAGS="-std=c11 -g -DDEBUG -W -Wall -Wextra -Wno-missing-braces -Wno-variadic-macros -rdynamic"
 LINKERS="-lfreetype -lSDL2 -lGLEW -lGLU -lGL -lm"
 INCLUDES="-I/usr/include/freetype2 -I./lib/"
 
@@ -95,8 +95,6 @@ function main {
     then
         echo -e "[!] ${green}Cleaning $BIN_DIR directory${reset}"
         rm -rf $BIN_DIR 2> /dev/null
-        echo -e "[!] ${green}Cleaning $LIB_DIR directory${reset}"
-        rm -rf $LIB_DIR 2> /dev/null
         echo -e "[!] ${green}Removing coredumps${reset}"
         rm -f core
 
@@ -132,9 +130,10 @@ function main {
         echo -e "[!] ${green}Creating directory ${reset}\`$LIB_DIR\` (poglib)"
         if [ $(whoami) == "gokul" ]
         then
-            ln -s ~/Documents/projects/poglib lib
+            ln -s /mnt/c/Users/User/OneDrive/Documents/projects/dev-libs lib
         else
-            git clone https://github.com/gimploo/poglib.git $LIB_DIR > /dev/null
+            mkdir "$LIB_DIR"
+            git clone https://github.com/gimploo/poglib.git $LIB_DIR/poglib > /dev/null
         fi
     else 
         echo -e "[!] ${green}Found directory ${reset}\`$LIB_DIR\`" 
