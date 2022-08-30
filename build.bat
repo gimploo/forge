@@ -130,7 +130,7 @@ REM                            v
                 %LIBRARY_DEFAULT_PATH%\FREETYPE\lib\win64\freetype.lib ^
                 Opengl32.lib glu32.lib
 
-    cl %CC_DEFAULT_FLAGS% %FLAGS%^
+    %CC% %CC_DEFAULT_FLAGS% %FLAGS%^
         %INCLUDES% ^
         /Fe%EXE_FOLDER_DEFAULT_PATH%\%EXE_FILE_NAME% ^
         %SRC_FOLDER_DEFAULT_PATH%\%SRC_FILE_NAME% ^
