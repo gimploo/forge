@@ -26,7 +26,7 @@ set SRC_FOLDER_DEFAULT_PATH=.\src
 set LIBRARY_DEFAULT_PATH=.\lib
 
 REM Source files and exe name
-set SRC_FILE_NAME=test.c
+set SRC_FILE_NAME=main.c
 set EXE_FILE_NAME=test.exe
 
 
