@@ -4,13 +4,12 @@
 # =============================================================================================
 
 
-SRC_PATH="./src/test.c"
+SRC_PATH="./src/main.c"
 EXE_NAME="test"
-DEPENDENCIES="libsdl2-dev freetype* libglew-dev"
 
 CC="gcc"
 FLAGS="-std=c11 -g -DDEBUG -W -Wall -Wextra -Wno-missing-braces -Wno-variadic-macros -rdynamic"
-LINKERS="-lfreetype -lSDL2 -lGLEW -lGLU -lGL -lm"
+LINKERS="-lfreetype -lglfw -lSDL2 -lGLEW -lGLU -lGL -lm"
 INCLUDES="-I/usr/include/freetype2 -I./lib/"
 
 
@@ -101,15 +100,6 @@ function main {
         echo " "
         exit 0
     fi
-
-    # Checking for dependencies
-    echo -e "[*] ${blue}Checking for dependencies ... ${reset}"
-    for depend in $DEPENDENCIES; do
-        echo -e "[*] ${blue}Checking for $depend ... ${reset}"
-        sudo apt-get install $depend -y > /dev/null
-    done
-    echo -e "[!] ${green}Dependencies are installed! ${reset}"
-
 
     # Set environment
     echo -e "[!] ${green}Setting up environment${reset}"
