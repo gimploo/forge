@@ -150,7 +150,7 @@ function main {
     fi
 
     # Running executable
-    if [ "$1" != "compile" ]
+    if [ "$1" == "run" ]
     then
         echo -e "[*] ${blue}Running executable ...\n${reset}"
         run_profiler 
