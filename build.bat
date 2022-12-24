@@ -195,6 +195,9 @@ REM ============================================================================
         if exist GLFW (
             copy GLFW\lib\glfw3.dll ..\%EXE_FOLDER_DEFAULT_PATH% >nul
         )
+        if exist poglib (
+            copy poglib\external\assimp\lib\Debug\assimp-vc143-mtd.dll ..\%EXE_FOLDER_DEFAULT_PATH% >nul
+        )
     popd
 
     exit /b 0
