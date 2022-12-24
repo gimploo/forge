@@ -113,6 +113,7 @@ REM                            v
 
     set INCLUDES=/I %LIBRARY_DEFAULT_PATH%\GLEW\include ^
                     /I %LIBRARY_DEFAULT_PATH%\FREETYPE\include ^
+                    /I %LIBRARY_DEFAULT_PATH%\poglib\external\assimp\include ^
                     /I %LIBRARY_DEFAULT_PATH%\SDL2\include ^
                     /I %LIBRARY_DEFAULT_PATH%\GLFW\include ^
                     /I %LIBRARY_DEFAULT_PATH%\
