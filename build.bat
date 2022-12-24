@@ -126,6 +126,7 @@ REM                            v
 
     set LIBS=%LIBRARY_DEFAULT_PATH%\GLEW\lib\Release\x64\glew32s.lib ^
                 %LIBRARY_DEFAULT_PATH%\FREETYPE\lib\win64\freetype.lib ^
+                %LIBRARY_DEFAULT_PATH%\poglib\external\assimp\lib\Debug\assimp-vc143-mtd.lib ^
                 %LIBRARY_DEFAULT_PATH%\GLFW\lib\glfw3dll.lib ^
                 %LIBRARY_DEFAULT_PATH%\SDL2\lib\x64\SDL2.lib ^
                 %LIBRARY_DEFAULT_PATH%\SDL2\lib\x64\SDL2main.lib ^
