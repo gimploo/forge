@@ -55,10 +55,7 @@ set EXE_FILE_NAME=test.exe
     ) else (
         echo [!] `lib` directory not found!
         echo [*] Checking dependenices ...
-        if "%USERNAME%" == "simploo" (
-            mklink /j "%LIBRARY_DEFAULT_PATH%" G:\libs
-        ) else (
-            call :check_dependencies_are_installed
+        call :check_dependencies_are_installed
         )
         echo [!] Dependencies all found!
     )
@@ -250,11 +247,7 @@ REM ============================================================================
 :deepcleanup
     echo [*] Cleanup in progress ...
     if exist "%LIBRARY_DEFAULT_PATH%" (
-        if "%USERNAME%" == "simploo" (
-            rmdir "%LIBRARY_DEFAULT_PATH%"
-        ) else (
-            rd /s /q "%LIBRARY_DEFAULT_PATH%"
-        )
+        rd /s /q "%LIBRARY_DEFAULT_PATH%"
         echo [!] `%LIBRARY_DEFAULT_PATH%` directory deleted!
     )
 
