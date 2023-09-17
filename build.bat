@@ -117,6 +117,9 @@ REM                            v
 
     if "%~1" == "debug" (
         set FLAGS=/DGLEW_STATIC /DDEBUG
+        echo [!] PREPROCESSOR FILE CREATED!!
+        %CC% %CC_DEFAULT_FLAGS% %FLAGS%^
+        /P %INCLUDES% %SRC_FOLDER_DEFAULT_PATH%\%SRC_FILE_NAME% || echo [!] Failed to preprocess! && exit /b 1
     ) else (
         set FLAGS=/DGLEW_STATIC 
     )
