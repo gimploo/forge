@@ -84,15 +84,13 @@ function main {
         Types of tags
         -------------
             help    - prints the usage
+            build   - only compiles program
             run     - compiles and runs the program
             debug   - runs the executable in a debugger after compilation
 
         "
         exit 0
     fi
-
-
-    echo " "
 
     local BIN_DIR="./bin"
     local LIB_DIR="./lib"
@@ -106,6 +104,17 @@ function main {
         rm -f core
 
         echo " "
+        exit 0
+    fi
+
+    if [ "$1" != "build" ]
+    then
+        exit 0
+    fi
+
+    if [ ! -d .git ]
+    then
+        echo "[!] Run within a C project (coudnt find .git folder here)"
         exit 0
     fi
 
