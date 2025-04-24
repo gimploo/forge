@@ -71,12 +71,7 @@ function run_profiler {
     time ./bin/$EXE_NAME
 }
 
-function main {
-
-    if [ "$1" == "help" ] 
-    then
-        echo -e "
-
+help_message=$(cat <<EOF
         Usage: ./build.sh <tag>
 
         Builds the project using gcc or specified compiler
@@ -87,8 +82,14 @@ function main {
             build   - only compiles program
             run     - compiles and runs the program
             debug   - runs the executable in a debugger after compilation
+EOF
+)
 
-        "
+function main {
+
+    if [ "$1" == "help" ] 
+    then
+        echo -e "$help_message"
         exit 0
     fi
 
@@ -109,6 +110,7 @@ function main {
 
     if [ "$1" != "build" ]
     then
+        echo -e "$help_message"
         exit 0
     fi
 
