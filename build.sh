@@ -24,13 +24,6 @@ blue=$(tput bold; tput setaf 4)
 reset=$(tput sgr0)
 
 
-function generating_complie_commands_json {
-    local FILE_PATH="$1"
-    echo -e "[*] Generating complie_commands.json file ..." &&
-    bear -- $CC $FILE_PATH $FLAGS $INCLUDES $LINKERS -o ./bin/$EXE_NAME &&
-    echo -e "[!] Done"
-}
-
 function setup_envirnoment {
 
     rm -rf core
@@ -48,7 +41,7 @@ function compile_in_linux {
 
     local FILE_PATH="$1"
 
-    $CC $FILE_PATH $FLAGS $INCLUDES $LINKERS -o ./bin/$EXE_NAME
+    bear -- $CC $FILE_PATH $FLAGS $INCLUDES $LINKERS -o ./bin/$EXE_NAME
 
 }
 
@@ -108,7 +101,7 @@ function main {
         exit 0
     fi
 
-    if [ "$1" != "build" ]
+    if [ "$1" != "build" ] && [ "$1" != "run" ] && [ "$1" != "debug" ]
     then
         echo -e "$help_message"
         exit 0
@@ -146,13 +139,6 @@ function main {
         fi
     else 
         echo -e "[!] ${green}Found directory ${reset}\`$LIB_DIR\`" 
-    fi
-
-    # Generating file for Lsp
-    if ! generating_complie_commands_json $SRC_PATH  ;
-    then
-        echo -e "[!] ${red}Generating compile_commands.json Failed ${reset}"
-        exit $LINENO
     fi
 
     # Compiling source files
