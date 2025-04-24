@@ -9,7 +9,7 @@ EXE_NAME="test"
 
 CC="gcc"
 FLAGS="-std=c11 -g -DDEBUG -W -Wall -Wextra -Wno-missing-braces -Wno-variadic-macros -rdynamic"
-LINKERS="-lfreetype -lglfw -lSDL2 -lGLEW -lGLU -lGL -lm"
+LINKERS="-lfreetype -lglfw -lSDL2 -lGLEW -lGLU -lGL -lm -lassimp"
 INCLUDES="-I/usr/include/freetype2 -I./lib/"
 
 
@@ -22,6 +22,14 @@ red=$(tput setaf 1)
 green=$(tput bold; tput setaf 2)
 blue=$(tput bold; tput setaf 4)
 reset=$(tput sgr0)
+
+
+function generating_complie_commands_json {
+    local FILE_PATH="$1"
+    echo -e "[*] Generating complie_commands.json file ..." &&
+    bear -- $CC $FILE_PATH $FLAGS $INCLUDES $LINKERS -o ./bin/$EXE_NAME &&
+    echo -e "[!] Done"
+}
 
 function setup_envirnoment {
 
@@ -127,6 +135,13 @@ function main {
         fi
     else 
         echo -e "[!] ${green}Found directory ${reset}\`$LIB_DIR\`" 
+    fi
+
+    # Generating file for Lsp
+    if ! generating_complie_commands_json $SRC_PATH  ;
+    then
+        echo -e "[!] ${red}Generating compile_commands.json Failed ${reset}"
+        exit $LINENO
     fi
 
     # Compiling source files
