@@ -8,7 +8,7 @@ SRC_PATH="./src/main.c"
 EXE_NAME="test"
 
 CC="gcc"
-FLAGS="-std=c11 -g -DDEBUG -W -Wall -Wextra -Wno-missing-braces -Wno-variadic-macros -rdynamic"
+FLAGS="-std=c11 -g -DDEBUG -W -Wall -Wextra -Wno-missing-braces -Wno-variadic-macros -rdynamic -Werror=incompatible-pointer-types"
 LINKERS="-lfreetype -lglfw -lSDL2 -lGLEW -lGLU -lGL -lm -lassimp"
 INCLUDES="-I/usr/include/freetype2 -I./lib/"
 
