@@ -86,8 +86,13 @@ set EXE_FILE_NAME=test.exe
 
     REM RUNS THE EXECUTABLE THROUGH A DEBUGGER (ONLY DEBUG BUILD)
     if "%1" == "debug" (
-        call :run_executable_with_debugger
-        goto :end
+        if "%2" == "--vs" (
+            call :run_executable_with_vsdebugger
+            goto :end
+        ) else if "%2" == "--rad" (
+            call :run_executable_with_raddebug
+            goto :end
+        )
     )
 
     REM RUNS THE EXECUTABLE NORMALLY (ONLY DEBUG BUILD)
@@ -157,9 +162,14 @@ REM ============================================================================
     echo.
     exit /b %errorlevel% 
 
-:run_executable_with_debugger
-    echo [!] Running executable through the debugger!
+:run_executable_with_vsdebugger
+    echo [!] Running executable through the VS debugger!
     devenv /DebugExe %EXE_FOLDER_DEFAULT_PATH%\%EXE_FILE_NAME%
+    exit /b 0
+
+:run_executable_with_raddebug
+    echo [!] Running executable through the raddebugger!
+    raddbg %EXE_FOLDER_DEFAULT_PATH%\%EXE_FILE_NAME% --project .\
     exit /b 0
 
 :check_dependencies_are_installed
