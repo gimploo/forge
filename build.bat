@@ -10,7 +10,7 @@ set LIBRARY_LIST=GLFW SDL2 GLEW FREETYPE POGLIB
 set GLFW_URL=https://github.com/glfw/glfw/releases/download/3.3.8/glfw-3.3.8.bin.WIN64.zip
 set SDL2_URL=https://www.libsdl.org/release/SDL2-devel-2.0.20-VC.zip
 set GLEW_URL=https://github.com/nigels-com/glew/releases/download/glew-2.2.0/glew-2.2.0-win32.zip
-set FREETYPE_URL=https://github.com/ubawurinna/freetype-windows-binaries/archive/refs/heads/master.zip
+set FREETYPE_URL=https://github.com/ubawurinna/freetype-windows-binaries/tree/v2.8.zip
 set POGLIB_URL=https://github.com/gimploo/poglib/archive/refs/heads/main.zip
 
 
@@ -130,7 +130,7 @@ REM                            v
     )
 
     set LIBS=%LIBRARY_DEFAULT_PATH%\GLEW\lib\Release\x64\glew32s.lib ^
-                %LIBRARY_DEFAULT_PATH%\FREETYPE\lib\win64\freetype.lib ^
+                %LIBRARY_DEFAULT_PATH%\FREETYPE\win64\freetype.lib ^
                 %LIBRARY_DEFAULT_PATH%\poglib\external\assimp\lib\Debug\assimp-vc143-mtd.lib ^
                 %LIBRARY_DEFAULT_PATH%\GLFW\lib\glfw3dll.lib ^
                 %LIBRARY_DEFAULT_PATH%\SDL2\lib\x64\SDL2.lib ^
@@ -208,6 +208,9 @@ REM ============================================================================
         if exist poglib (
             copy poglib\external\assimp\lib\Debug\assimp-vc143-mtd.dll ..\%EXE_FOLDER_DEFAULT_PATH% >nul
         )
+        if exist FREETYPE (
+            copy FREETYPE\win64\freetype.dll ..\%EXE_FOLDER_DEFAULT_PATH% > nul
+        )
     popd
 
     exit /b 0
@@ -225,15 +228,6 @@ REM ============================================================================
         pushd SDL2\include
             mkdir SDL2
             move *.h SDL2\ >nul
-        popd
-    )
-
-    if "%~1" == "FREETYPE" (
-        pushd FreeType\
-            rename "release static" lib
-            move "lib\vs2015-2022\win64" lib\ >nul
-            move "lib\vs2015-2022\win32" lib\ >nul
-            rd /s /q "lib\vs2015-2022"
         popd
     )
 
