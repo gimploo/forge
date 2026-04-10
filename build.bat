@@ -17,7 +17,7 @@ set POGLIB_URL=https://github.com/gimploo/poglib/archive/refs/heads/main.zip
 REM Include compiler of choice (here its msvc)
 set CC=cl
 set CC_PATH="C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
-set CC_DEFAULT_FLAGS=/std:c11 /W4 /wd4244 /wd4996 /wd4477 /wd4267 /w14996 /FC /TC /Zi
+set CC_DEFAULT_FLAGS=/std:c11 /W4 /wd4244 /wd4996 /wd4477 /wd4267 /w14996 /FC /TC /Zi /experimental:c11atomics
 set CC_DEFAULT_LIBS=User32.lib Gdi32.lib Shell32.lib winmm.lib dbghelp.lib shlwapi.lib
 
 REM Source and executalble path (default)
@@ -121,12 +121,12 @@ REM                            v
                     /I %LIBRARY_DEFAULT_PATH%\
 
     if "%~1" == "debug" (
-        set FLAGS=/DGLEW_STATIC /DDEBUG
+        set FLAGS=/DGLEW_STATIC /DDEBUG /DJPH_PROFILE_ENABLED /DJPH_USE_SSE4_2 /MTd
         echo [!] PREPROCESSOR FILE CREATED!!
         %CC% %CC_DEFAULT_FLAGS% %FLAGS%^
         /P %INCLUDES% %SRC_FOLDER_DEFAULT_PATH%\%SRC_FILE_NAME% || echo [!] Failed to preprocess! && exit /b 1
     ) else (
-        set FLAGS=/DGLEW_STATIC 
+        set FLAGS=/DGLEW_STATIC /DJPH_USE_SSE4_2 /MT
     )
 
     set LIBS=%LIBRARY_DEFAULT_PATH%\GLEW\lib\Release\x64\glew32s.lib ^
@@ -135,6 +135,8 @@ REM                            v
                 %LIBRARY_DEFAULT_PATH%\GLFW\lib\glfw3dll.lib ^
                 %LIBRARY_DEFAULT_PATH%\SDL2\lib\x64\SDL2.lib ^
                 %LIBRARY_DEFAULT_PATH%\SDL2\lib\x64\SDL2main.lib ^
+                %LIBRARY_DEFAULT_PATH%\poglib\external\joltc\lib\windows\debug\Joltd.lib ^
+                %LIBRARY_DEFAULT_PATH%\poglib\external\joltc\lib\windows\debug\Joltcd.lib ^
                 Opengl32.lib glu32.lib
 
     %CC% %CC_DEFAULT_FLAGS% %FLAGS%^
